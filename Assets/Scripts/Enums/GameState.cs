@@ -1,6 +1,9 @@
-﻿public enum GameState 
+﻿namespace FPS
 {
-    GamePlay,
-    Pause,
-    GameOver
+    public enum GameState
+    {
+        GamePlay,
+        Pause,
+        GameOver
+    }
 }

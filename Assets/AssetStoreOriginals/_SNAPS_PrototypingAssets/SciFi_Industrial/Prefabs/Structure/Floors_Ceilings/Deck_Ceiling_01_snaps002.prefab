@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33689940742858052}
   - component: {fileID: 23425895908950242}
   - component: {fileID: 65909924639502826}
+  - component: {fileID: 6757842294377011471}
   m_Layer: 0
   m_Name: Deck_Ceiling_01_snaps002
   m_TagString: Untagged
@@ -55,6 +56,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -68,6 +70,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -93,3 +96,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.0000005, y: 0.12500119, z: 3.0000248}
   m_Center: {x: 1.5000002, y: 0.062499404, z: 1.4999993}
+--- !u!114 &6757842294377011471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711423000800634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a79d9cb4984d104486d938e437952b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

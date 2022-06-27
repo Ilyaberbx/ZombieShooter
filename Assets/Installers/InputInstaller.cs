@@ -4,14 +4,11 @@ namespace FPS
 {
     public class InputInstaller : MonoInstaller
     {
-        public override void InstallBindings()
-        {
-            BindMovementInput();
-        }
+        public override void InstallBindings() => BindMovementInput();
         private void BindMovementInput()
         {
-            DefaulMovementInput _movementInput = new DefaulMovementInput();
-            Container.Bind<DefaulMovementInput>().
+            BasicFPSInput _movementInput = new BasicFPSInput();
+            Container.Bind<BasicFPSInput>().
                 FromInstance(_movementInput).
                 AsSingle().
                 NonLazy();

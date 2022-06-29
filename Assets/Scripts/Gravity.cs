@@ -2,7 +2,7 @@
 
 namespace FPS
 {
-    public class Gravity : MonoBehaviour
+    public class Gravity : GamePlayObjectMono
     {
         public Vector3 Velocity
         {
@@ -28,10 +28,13 @@ namespace FPS
 
         private void Awake() => Inititalize();
 
+        private void OnDestroy() => GameStateController.OnGameStateChanged -= OnGameStateChanged;
+
         private void Update() => CalculateGravity();
 
         private void Inititalize()
         {
+            GameStateController.OnGameStateChanged += OnGameStateChanged;
             _characterController = GetComponent<CharacterController>();
             _gravity *= _settings.GravityCoefficient;
         }

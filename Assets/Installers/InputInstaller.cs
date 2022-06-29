@@ -7,8 +7,8 @@ namespace FPS
         public override void InstallBindings() => BindMovementInput();
         private void BindMovementInput()
         {
-            BasicFPSInput _movementInput = new BasicFPSInput();
-            Container.Bind<BasicFPSInput>().
+            DefaultMovementInput _movementInput = new DefaultMovementInput();
+            Container.Bind<DefaultMovementInput>().
                 FromInstance(_movementInput).
                 AsSingle().
                 NonLazy();

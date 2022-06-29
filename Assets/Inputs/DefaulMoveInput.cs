@@ -8,10 +8,10 @@ using UnityEngine.InputSystem.Utilities;
 
 namespace FPS
 {
-    public class @BasicFPSInput : IInputActionCollection, IDisposable
+    public class @DefaultMovementInput: IInputActionCollection, IDisposable
     {
         public InputActionAsset asset { get; }
-        public @BasicFPSInput()
+        public @DefaultMovementInput()
         {
             asset = InputActionAsset.FromJson(@"{
     ""name"": ""DefaulMoveInput"",
@@ -40,6 +40,30 @@ namespace FPS
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""fefe6dca-fe5c-4777-b9f5-06acf4e6f588"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""632cd2de-92e7-4d7b-b741-2c894fa373ca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Prone"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""8edb31bf-2278-49ef-9ba2-203fac2f6494"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""8b88ee59-680f-441d-aba9-a08ae2c0f78f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -122,6 +146,50 @@ namespace FPS
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c905dd60-8ba9-4abd-af29-aa1055170ca6"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b227181-dd5c-4424-9d0a-5ecccfc27e8c"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Prone"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de6a5c42-af9d-42ca-97ae-ddb38fdd6835"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Prone"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f5ded10c-1ed8-42a4-8d5e-062d371eab99"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -133,6 +201,9 @@ namespace FPS
             m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
             m_Player_View = m_Player.FindAction("View", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+            m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+            m_Player_Prone = m_Player.FindAction("Prone", throwIfNotFound: true);
+            m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -185,13 +256,19 @@ namespace FPS
         private readonly InputAction m_Player_Movement;
         private readonly InputAction m_Player_View;
         private readonly InputAction m_Player_Jump;
+        private readonly InputAction m_Player_Crouch;
+        private readonly InputAction m_Player_Prone;
+        private readonly InputAction m_Player_Sprint;
         public struct PlayerActions
         {
-            private @BasicFPSInput m_Wrapper;
-            public PlayerActions(@BasicFPSInput wrapper) { m_Wrapper = wrapper; }
+            private @DefaultMovementInput m_Wrapper;
+            public PlayerActions(@DefaultMovementInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
             public InputAction @View => m_Wrapper.m_Player_View;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
+            public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+            public InputAction @Prone => m_Wrapper.m_Player_Prone;
+            public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -210,6 +287,15 @@ namespace FPS
                     @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                     @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                     @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                    @Crouch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                    @Crouch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                    @Crouch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                    @Prone.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProne;
+                    @Prone.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProne;
+                    @Prone.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProne;
+                    @Sprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
+                    @Sprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
+                    @Sprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -223,6 +309,15 @@ namespace FPS
                     @Jump.started += instance.OnJump;
                     @Jump.performed += instance.OnJump;
                     @Jump.canceled += instance.OnJump;
+                    @Crouch.started += instance.OnCrouch;
+                    @Crouch.performed += instance.OnCrouch;
+                    @Crouch.canceled += instance.OnCrouch;
+                    @Prone.started += instance.OnProne;
+                    @Prone.performed += instance.OnProne;
+                    @Prone.canceled += instance.OnProne;
+                    @Sprint.started += instance.OnSprint;
+                    @Sprint.performed += instance.OnSprint;
+                    @Sprint.canceled += instance.OnSprint;
                 }
             }
         }
@@ -232,6 +327,9 @@ namespace FPS
             void OnMovement(InputAction.CallbackContext context);
             void OnView(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
+            void OnCrouch(InputAction.CallbackContext context);
+            void OnProne(InputAction.CallbackContext context);
+            void OnSprint(InputAction.CallbackContext context);
         }
     }
 }

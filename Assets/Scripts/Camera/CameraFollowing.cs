@@ -5,7 +5,7 @@ namespace FPS
 {
     public class CameraFollowing : GamePlayObjectMono
     {
-        [Inject] private BasicFPSInput _movementInput;
+        [Inject] private DefaultMovementInput _movementInput;
 
         [SerializeField] private Settings _settings;
 
@@ -21,11 +21,11 @@ namespace FPS
         private void Initialize()
         {
             Cursor.lockState = CursorLockMode.Locked;
-            InitializeInputSystem();
             GameStateController.OnGameStateChanged += OnGameStateChanged;
             _player = GetComponentInParent<PlayerMovement>();
-        }
-        private void InitializeInputSystem() => _movementInput.Player.View.performed += e => _inputView = e.ReadValue<Vector2>();
+        }   
+        private void OnEnable() => _movementInput.Player.View.performed += e => _inputView = e.ReadValue<Vector2>();
+        private void OnDisable() => _movementInput.Player.View.performed -= e => _inputView = e.ReadValue<Vector2>();
 
         private void Update() => CalculateView();
         private void CalculateView()

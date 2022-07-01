@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace FPS
 {
     public class Gravity : GamePlayObjectMono
     {
+        public bool IsGrounded => TryCatchGround();
+
         public Vector3 Velocity
         {
             get => _velocity;
@@ -24,7 +27,6 @@ namespace FPS
         private CharacterController _characterController;
         private Vector3 _velocity;
         private float _groundedGravity = -2f;
-
 
         private void Awake() => Inititalize();
 
@@ -58,7 +60,7 @@ namespace FPS
             if (TryCatchGround() && Velocity.y < 0) _velocity.y = _groundedGravity;
 
             _velocity.y += _gravity * Time.deltaTime;
-            _characterController.Move(Velocity * Time.deltaTime);
+            _characterController.Move(Velocity * Time.deltaTime);         
         }
     }
 

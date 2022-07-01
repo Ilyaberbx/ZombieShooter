@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e4daf48ba928144a45b22d15d73f09, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  _viewXSensetivity: 15
-  _viewYSensetivity: 15
+  _viewXSensetivity: 5
+  _viewYSensetivity: 5
   _viewInverted: 0
   _gravityCoefficient: 2

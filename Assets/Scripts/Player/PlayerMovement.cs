@@ -19,7 +19,7 @@ namespace FPS
         private MovementSettings _movementSettings;
         private Vector2 _inputAxes;
         private bool _isSprinting;
-        public float _speedCoefficient;
+        public float SpeedCoefficient { get; private set; }
 
         private void Awake() => Initialize();
         private void OnDestroy()
@@ -33,7 +33,7 @@ namespace FPS
             _movementInput.Player.Jump.performed += e => Jump();
             _movementInput.Player.Sprint.performed += e => ToggleSprinting();
             _movementInput.Enable();
-            _speedCoefficient = 1f;
+            SpeedCoefficient = 1f;
         }
         private void OnDisable()
         {
@@ -43,33 +43,34 @@ namespace FPS
         }
         private void Update() => CalculateMovement();
         private void Initialize()
-        {
-            GameStateController.OnGameStateChanged += OnGameStateChanged;
+        {          
             _characterController = GetComponent<CharacterController>();
             _playerStanceSystem = GetComponent<PlayerStanceSystem>();
             _movementSettings = GetComponent<MovementSettings>();
             _gravity = GetComponent<Gravity>();
+            GameStateController.OnGameStateChanged += OnGameStateChanged;
             _playerStanceSystem.OnStanceChanged += OnStanceChanged;
         }
         private void CalculateMovement()
         {
-            var verticalSpeed = _movementSettings.WalkingForwardSpeed * _inputAxes.y * _speedCoefficient * Time.deltaTime;
-            var horizontalSpeed = _movementSettings.WalkingStrafeSpeed * _inputAxes.x * _speedCoefficient * Time.deltaTime;
+            var verticalSpeed = _movementSettings.WalkingForwardSpeed * _inputAxes.y * SpeedCoefficient * Time.deltaTime;
+            var horizontalSpeed = _movementSettings.WalkingStrafeSpeed * _inputAxes.x * SpeedCoefficient * Time.deltaTime;
             Movement = transform.right * horizontalSpeed + transform.forward * verticalSpeed;
-            _characterController.Move(Movement);
+
             CalculateSprintingStop();
+
+            if (Movement.magnitude <= 0f) return;
+
+            _characterController.Move(Movement);             
         }
         private void CalculateSprintingStop()
         {
-            if (!_isSprinting) return;
-
             if (_inputAxes.y <= _movementSettings.MinVelocityToSprint || !_gravity.TryCatchGround())
                 StopSprint();
-
         }
         private void Jump()
         {
-            if (!_gravity.TryCatchGround()) return;
+            if (!_gravity.IsGrounded) return;
 
             if (_playerStanceSystem.CurrentStance != PlayerStance.Standing)
             {
@@ -89,7 +90,7 @@ namespace FPS
 
             if (_isSprinting)
             {
-                _speedCoefficient = _movementSettings.SprintingSpeedUpCoefficient;
+                SpeedCoefficient = _movementSettings.SprintingSpeedUpCoefficient;
                 return;
             }
 
@@ -102,18 +103,21 @@ namespace FPS
 
             switch (newStance)
             {
+                case PlayerStance.Standing:
+                    SpeedCoefficient = 1f;
+                    break;
                 case PlayerStance.Crouching:
-                    _speedCoefficient = _movementSettings.CrouchingSpeedUpCoefficient;
+                    SpeedCoefficient = _movementSettings.CrouchingSpeedUpCoefficient;
                     break;
                 case PlayerStance.Prone:
-                    _speedCoefficient = _movementSettings.ProneSpeedUpCoefficient;
+                    SpeedCoefficient = _movementSettings.ProneSpeedUpCoefficient;
                     break;
             }
         }
         private void StopSprint()
         {
             _isSprinting = false;
-            _speedCoefficient = 1f;
+            SpeedCoefficient = 1f;
             OnSprintingToggled?.Invoke(_isSprinting);
         }
 

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Zenject;
+using System.Threading.Tasks;
 
 namespace FPS
 {
@@ -7,6 +7,7 @@ namespace FPS
     {
         private const string IS_SPRINTING = "IsSprinting";
         private const string IS_GROUNDED = "IsGrounded";
+        private const string IS_MOVING = "IsMoving";
 
         private Animator _animator;
         private PlayerMovement _playerMovement;
@@ -41,13 +42,11 @@ namespace FPS
 
             if (movementMagnitude == 0 && gravityMagnitude == 0)
             {
-                while(_animator.hasBoundPlayables) { }
-
-                _animator.speed = 0;
+                _animator.SetBool(IS_MOVING, false);
                 return;
             }
 
-            _animator.speed = 1f;
+            _animator.SetBool(IS_MOVING, true);
         }
         private void CalculateAnimatorFalling() => _animator.SetBool(IS_GROUNDED, _gravity.IsGrounded);
         private void ToggleSprinting(bool isSprinting) => _animator.SetBool(IS_SPRINTING, isSprinting);

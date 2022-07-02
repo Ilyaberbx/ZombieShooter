@@ -20,7 +20,7 @@ namespace FPS
         public float GroundedGravity => _groundedGravity;
 
         [SerializeField] private Transform _targetCheckGroundPosition;
-        [SerializeField] private float _checkingRayLength;
+        [SerializeField] private float _checkingGroundfRadius;
         [SerializeField] private Settings _settings;
 
         private float _gravity = -9.81f;
@@ -42,25 +42,29 @@ namespace FPS
         }
         public bool TryCatchGround()
         {
-            RaycastHit hit;
-            StrikeRay(out hit);
-            if (hit.transform != null)
-                if (hit.transform.GetComponent<Ground>() != null) return true;
+            Collider[] hits = Physics.OverlapSphere(_targetCheckGroundPosition.position, _checkingGroundfRadius);
+
+            foreach (var check in hits)
+            {
+                if (check.transform != null)
+                    if (check.transform.GetComponent<Ground>() != null) return true;
+            }
 
             return false;
         }
-        private void StrikeRay(out RaycastHit hit)
-        {
-            Ray ray = new Ray(_targetCheckGroundPosition.position, Vector3.down);
-            Debug.DrawRay(_targetCheckGroundPosition.position, Vector3.down * _checkingRayLength, Color.red);
-            Physics.Raycast(ray, out hit, _checkingRayLength);
-        }
+
         private void CalculateGravity()
         {
             if (TryCatchGround() && Velocity.y < 0) _velocity.y = _groundedGravity;
 
             _velocity.y += _gravity * Time.deltaTime;
-            _characterController.Move(Velocity * Time.deltaTime);         
+            _characterController.Move(Velocity * Time.deltaTime);
+        }
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(_targetCheckGroundPosition.position, _checkingGroundfRadius);
+            Gizmos.color = Color.white;
         }
     }
 

@@ -3,7 +3,7 @@ using Zenject;
 
 namespace FPS
 {
-    public class WeaponSway : GamePlayObjectMono
+    public class WeaponSway : GamePlayBehaviour
     {
         [Inject] private DefaultMovementInput _movementInput;
 

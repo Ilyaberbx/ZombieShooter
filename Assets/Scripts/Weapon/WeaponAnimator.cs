@@ -1,23 +1,34 @@
 ﻿using UnityEngine;
-using System.Threading.Tasks;
 
 namespace FPS
 {
-    public class WeaponAnimator : GamePlayObjectMono
+    public class WeaponAnimator : GamePlayBehaviour
     {
         private const string IS_SPRINTING = "IsSprinting";
         private const string IS_GROUNDED = "IsGrounded";
         private const string IS_MOVING = "IsMoving";
+        private const string IS_ATTACKING = "IsAttacking";
+        protected const string IS_RELOADING = "IsReloading";
 
-        private Animator _animator;
+        protected Animator _animator;
         private PlayerMovement _playerMovement;
+        private IWeapon _weapon;
         private Gravity _gravity;
 
         private void Awake() => Initialize();
 
-        private void OnEnable() => _playerMovement.OnSprintingToggled += ToggleSprinting;
+        private void OnEnable()
+        {
+            _playerMovement.OnSprintingToggled += ToggleSprinting;
+            _weapon.OnAttacked += CalculateAttackment;
+             ToggleSprinting(_playerMovement.IsSprinting);
+        }
 
-        private void OnDisable() => _playerMovement.OnSprintingToggled -= ToggleSprinting;
+        private void OnDisable()
+        {
+            _playerMovement.OnSprintingToggled -= ToggleSprinting;
+            _weapon.OnAttacked -= CalculateAttackment;
+        }
 
         private void Update()
         {
@@ -27,8 +38,9 @@ namespace FPS
 
         private void Initialize()
         {
-            _animator = GetComponent<Animator>();
             _playerMovement = GetComponentInParent<PlayerMovement>();
+            _animator = GetComponent<Animator>();
+            _weapon = GetComponentInParent<IWeapon>();
             _gravity = GetComponentInParent<Gravity>();
             GameStateController.OnGameStateChanged += OnGameStateChanged;
         }
@@ -50,5 +62,8 @@ namespace FPS
         }
         private void CalculateAnimatorFalling() => _animator.SetBool(IS_GROUNDED, _gravity.IsGrounded);
         private void ToggleSprinting(bool isSprinting) => _animator.SetBool(IS_SPRINTING, isSprinting);
+        private void CalculateAttackment(bool isAttacking) => _animator.SetBool(IS_ATTACKING, isAttacking);
+
+        
     }
 }

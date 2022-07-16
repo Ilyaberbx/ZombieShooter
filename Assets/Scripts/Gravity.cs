@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FPS
 {
-    public class Gravity : GamePlayObjectMono
+    public class Gravity : GamePlayBehaviour
     {
         public bool IsGrounded => TryCatchGround();
 
@@ -12,21 +12,22 @@ namespace FPS
             get => _velocity;
             set
             {
-                if (value != null)
-                    _velocity = value;
+                if (value == null) return;
+                _velocity = value;
             }
         }
         public float GeneralGravity => _gravity;
         public float GroundedGravity => _groundedGravity;
 
+        private readonly float _groundedGravity = -2f;
+        private float _gravity = -9.81f;
+
         [SerializeField] private Transform _targetCheckGroundPosition;
         [SerializeField] private float _checkingGroundfRadius;
         [SerializeField] private Settings _settings;
 
-        private float _gravity = -9.81f;
         private CharacterController _characterController;
         private Vector3 _velocity;
-        private float _groundedGravity = -2f;
 
         private void Awake() => Inititalize();
 
@@ -47,7 +48,7 @@ namespace FPS
             foreach (var check in hits)
             {
                 if (check.transform != null)
-                    if (check.transform.GetComponent<Ground>() != null) return true;
+                    if (check.transform.GetComponentInParent<Ground>() != null) return true;
             }
 
             return false;

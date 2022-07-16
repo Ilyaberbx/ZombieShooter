@@ -4,21 +4,24 @@ using Zenject;
 
 namespace FPS
 {
-    public class PlayerMovement : GamePlayObjectMono
+    public class PlayerMovement : GamePlayBehaviour
     {
         [Inject] private DefaultMovementInput _movementInput;
 
-        public Action<bool> OnSprintingToggled;
-
+        public event Action<bool> OnSprintingToggled;
+        public event Action OnJumped;
         public Vector3 Movement { get; private set; }
+        public bool IsSprinting => _isSprinting;
 
         public float SpeedCoefficient
         {
-            get { return _speedCoefficient; }
+            get => _speedCoefficient;
             set
             {
                 if (value > 0)
                     _speedCoefficient = value;
+                else
+                    Debug.LogError("Value must be greater than 0");
             }
 
         }
@@ -93,6 +96,8 @@ namespace FPS
 
             }
 
+            OnJumped?.Invoke();
+
             _gravity.Velocity = new Vector3(0, Mathf.Sqrt(_movementSettings.JumpingForce * _gravity.GeneralGravity * _gravity.GroundedGravity), 0);
         }
         private void ToggleSprinting()
@@ -106,11 +111,8 @@ namespace FPS
 
             OnSprintingToggled?.Invoke(_isSprinting);
 
-            if (_isSprinting)
-            {
-                SpeedCoefficient = _movementSettings.SprintingSpeedUpCoefficient;
-                return;
-            }
+            SpeedCoefficient = _isSprinting ? _movementSettings.SprintingSpeedCoefficient : 1f;
+            return;
 
         }
 

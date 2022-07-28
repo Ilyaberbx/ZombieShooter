@@ -14,20 +14,20 @@ namespace FPS
 
             _shootingRoutine = StartCoroutine(ShootingRoutine());
         }
-        public override void StartAttacking()
+        public override void StartShooting()
         {
             _isShooting = true;
-            OnAttackedInvoker(_isShooting);
+            OnAttackInvoker(_isShooting);
         }
-        public override void StopAttacking()
+        public override void StopShooting()
         {
             _isShooting = false;
-            OnAttackedInvoker(_isShooting);
+            OnAttackInvoker(_isShooting);
         }
 
         public override IEnumerator ShootingRoutine()
         {
-            StartAttacking();
+            StartShooting();
 
             while (_isShooting && CurrentAmmo > 0)
             {
@@ -36,8 +36,9 @@ namespace FPS
                 _shootEffect.Play();
 
                 RaycastHit hit;
+
                 if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _shootingRange))
-                    ApplyHit(hit);
+                    HandleHit(hit);
 
                 CurrentAmmo--;
                 ChangeAmmoCount(CurrentAmmo);
@@ -49,8 +50,16 @@ namespace FPS
                 _inCoolDown = false;
             }
 
-            StopAttacking();
+            StopShooting();
         }
-   
+        private void HandleHit(RaycastHit hit)
+        {
+            var hitMark = _hitMarkPool.Pool.GetFreeElement();
+            hitMark.transform.position = hit.point;
+
+            if (hit.transform.TryGetComponent(out IWeaponVisitor visitor))
+                visitor.Visit(this);
+        }
+
     }
 }

@@ -11,7 +11,7 @@ namespace FPS
         {
             get { return _inputSelection; }
             set
-            { 
+            {
                 if (_playerMovement.IsSprinting) return;
                 _inputSelection = value;
                 DefaultSelectionLogic();
@@ -20,8 +20,9 @@ namespace FPS
 
         private int _selectedWeapon = 0;
         private int _previousWeapon;
-        private float _inputSelection;       
+        private float _inputSelection;
         private PlayerMovement _playerMovement;
+        private WeaponLauncher _weaponLauncher;
 
         private void Awake() => Inititalize();
         private void OnEnable() => _weaponInput.Weapon.MouseScroll.performed += e => InputSelection = e.ReadValue<float>();
@@ -30,7 +31,9 @@ namespace FPS
         private void Inititalize()
         {
             _playerMovement = GetComponentInParent<PlayerMovement>();
+            _weaponLauncher = GetComponent<WeaponLauncher>();
             GameStateController.OnGameStateChanged += OnGameStateChanged;
+            SelectWeapon();
         }
         private void DefaultSelectionLogic()
         {
@@ -48,8 +51,16 @@ namespace FPS
             {
                 weapon.gameObject.SetActive(i == _selectedWeapon);
                 i++;
+                if (weapon.gameObject.activeInHierarchy)
+                    SetSelectedWeapon(weapon.GetComponent<IWeapon>());
             }
+
         }
+        private void SetSelectedWeapon(IWeapon weapon)
+        {
+            _weaponLauncher.SetWeapon(weapon);
+        }
+
         private void CalculateInputSelection()
         {
             if (_inputSelection > 0f)

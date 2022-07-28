@@ -20,8 +20,8 @@ namespace FPS
         public float GroundedGravity => _groundedGravity;
 
         private readonly float _groundedGravity = -2f;
-        private float _gravity = -9.81f;
 
+        [SerializeField] private float _gravity = -9.81f;
         [SerializeField] private Transform _targetCheckGroundPosition;
         [SerializeField] private float _checkingGroundfRadius;
         [SerializeField] private Settings _settings;

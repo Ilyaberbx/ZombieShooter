@@ -4,11 +4,8 @@ namespace FPS
 {
     public interface IWeapon
     {
+        int Damage { get; }
         void Attack();
-        void StartAttacking();
-        void StopAttacking();
-
-        event Action<bool> OnAttacked;
         
     }
 }

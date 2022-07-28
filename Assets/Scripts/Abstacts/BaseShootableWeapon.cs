@@ -7,19 +7,19 @@ namespace FPS
 {
     public abstract class BaseShootableWeapon : GamePlayBehaviour, IWeapon
     {
+        [Inject] protected WeaponInput _weaponInput;
         public abstract void Attack();
 
-        public abstract void StartAttacking();
+        public abstract void StartShooting();
 
-        public abstract void StopAttacking();
+        public abstract void StopShooting();
 
         public abstract IEnumerator ShootingRoutine();
 
-        [Inject] protected WeaponInput _weaponInput;
-
-        public event Action<bool> OnAttacked;
+        public event Action<bool> OnAttacking;
         public event Action<int> OnAmmoCountChanged;
         public int CurrentAmmo { get; protected set; }
+        public int Damage => _damage;
 
         [Header("Weapon Settings")]
         [Range(0.1f, 2)]
@@ -28,10 +28,11 @@ namespace FPS
         [SerializeField] private int _maxAmmoCount;
         [SerializeField] private float _reloadTime;
         [SerializeField] private bool _autoGun;
+        [SerializeField] private int _damage;
 
         [Header("References")]
         [SerializeField] protected Camera _camera;
-        [SerializeField] private HitMarkPool _hitMarkPool;
+        [SerializeField] protected HitMarkPool _hitMarkPool;
         [SerializeField] private HitMark _hitMarkPrefab;
         [SerializeField] protected ParticleSystem _shootEffect;
 
@@ -41,35 +42,46 @@ namespace FPS
         protected PlayerMovement _playerMovement;
         protected Gravity _gravity;
 
-        private ReloadableWeaponAnimator _weaponAnimator;
+        private ShootableWeaponAnimator _weaponAnimator;
 
         private void Start() => ChangeAmmoCount(_maxAmmoCount);
         private void Awake() => Initialize();
         private void OnEnable()
         {
-            _playerMovement.OnJumped += StopAttacking;
+            _playerMovement.OnJumped += StopShooting;
             _playerMovement.OnSprintingToggled += PlayerSprinting;
-            _weaponInput.Weapon.FirePressed.performed += e => Attack();
 
             if (_autoGun)
-                _weaponInput.Weapon.FireReleased.performed += e => StopAttacking();
+                _weaponInput.Weapon.FireReleased.performed += e => StopShooting();
 
             _weaponInput.Weapon.Reload.performed += e => Reload();
         }
         private void OnDisable()
         {
-            _playerMovement.OnJumped -= StopAttacking;
+            _playerMovement.OnJumped -= StopShooting;
             _playerMovement.OnSprintingToggled -= PlayerSprinting;
-            _weaponInput.Weapon.FirePressed.performed -= e => Attack();
+           
 
             if (_autoGun)
-                _weaponInput.Weapon.FireReleased.performed -= e => StopAttacking();
+                _weaponInput.Weapon.FireReleased.performed -= e => StopShooting();
 
             _weaponInput.Weapon.Reload.performed -= e => Reload();
             DisactivateWeapon();
         }
         private void OnDestroy() => GameStateController.OnGameStateChanged -= OnGameStateChanged;
-        protected void OnAttackedInvoker(bool isShooting) => OnAttacked?.Invoke(isShooting);
+        private void Initialize()
+        {
+            _playerMovement = GetComponentInParent<PlayerMovement>();
+            _gravity = GetComponentInParent<Gravity>();
+            _weaponAnimator = GetComponentInChildren<ShootableWeaponAnimator>();
+            GameStateController.OnGameStateChanged += OnGameStateChanged;
+            _hitMarkPool.Initialize(_hitMarkPrefab, _maxAmmoCount, false);
+            _shootEffect.Stop();
+            _shootEffect.gameObject.SetActive(false);
+            _weaponInput.Enable();
+        }
+
+        protected void OnAttackInvoker(bool isShooting) => OnAttacking?.Invoke(isShooting);
         protected void ChangeAmmoCount(int ammoCount)
         {
             CurrentAmmo = ammoCount;
@@ -81,32 +93,9 @@ namespace FPS
 
             if (CurrentAmmo <= 0) return false;
 
-            if (_playerMovement.IsSprinting || !_gravity.IsGrounded)
-            {
-                _isShooting = false;
-                return false;
-            }
-
             return true;
-        }
-        protected void ApplyHit(RaycastHit hit)
-        {
-            var hitMark = _hitMarkPool.Pool.GetFreeElement();
-            hitMark.transform.position = hit.point;
-        }
-        private void Initialize()
-        {
-            _playerMovement = GetComponentInParent<PlayerMovement>();
-            _gravity = GetComponentInParent<Gravity>();
-            _weaponAnimator = GetComponentInChildren<ReloadableWeaponAnimator>();
-            GameStateController.OnGameStateChanged += OnGameStateChanged;
-            _hitMarkPool.Initialize(_hitMarkPrefab, _maxAmmoCount, false);
-            _shootEffect.Stop();
-            _shootEffect.gameObject.SetActive(false);
-            _weaponInput.Enable();
-        }
-
-        private void PlayerSprinting(bool isSprinting) { if (isSprinting) StopAttacking(); }
+        }    
+        private void PlayerSprinting(bool isSprinting) { if (isSprinting) StopShooting(); }
 
         private void Reload()
         {

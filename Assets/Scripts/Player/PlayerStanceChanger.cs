@@ -4,7 +4,7 @@ using Zenject;
 
 namespace FPS
 {
-    public class PlayerStanceChanger : GamePlayBehaviour
+    public class PlayerStanceChanger : InGameBehaviour
     {
         [Inject] private DefaultMovementInput _movementInput;
         public PlayerStance CurrentStance { get; private set; }
@@ -62,7 +62,6 @@ namespace FPS
 
             _cameraStance.CurrentDesireHeight = _playerCrouching.CameraHeight;
             _playerMovement.SpeedCoefficient = _movementSettings.CrouchingSpeedCoefficient;
-            _playerMovement.StopSprinting();
         }
         public void Prone()
         {
@@ -74,7 +73,6 @@ namespace FPS
 
             _cameraStance.CurrentDesireHeight = _playerProne.CameraHeight;
             _playerMovement.SpeedCoefficient = _movementSettings.ProneSpeedUpCoefficient;
-            _playerMovement.StopSprinting();
         }
         public void StandUp()
         {

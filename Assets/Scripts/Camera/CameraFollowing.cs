@@ -3,7 +3,7 @@ using Zenject;
 
 namespace FPS
 {
-    public class CameraFollowing : GamePlayBehaviour
+    public class CameraFollowing : InGameBehaviour
     {
         [Inject] private DefaultMovementInput _movementInput;
 

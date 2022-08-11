@@ -5,9 +5,10 @@ using Zenject;
 
 namespace FPS
 {
-    public abstract class BaseShootableWeapon : GamePlayBehaviour, IWeapon
+    public abstract class BaseShootableWeapon : InGameBehaviour, IWeapon
     {
         [Inject] protected WeaponInput _weaponInput;
+        [Inject] protected DecalPreset _decalsPreset;
         public abstract void Attack();
 
         public abstract void StartShooting();
@@ -29,11 +30,10 @@ namespace FPS
         [SerializeField] private float _reloadTime;
         [SerializeField] private bool _autoGun;
         [SerializeField] private int _damage;
+        [SerializeField] protected int _reboundForce;
 
         [Header("References")]
         [SerializeField] protected Camera _camera;
-        [SerializeField] protected HitMarkPool _hitMarkPool;
-        [SerializeField] private HitMark _hitMarkPrefab;
         [SerializeField] protected ParticleSystem _shootEffect;
 
         protected Coroutine _shootingRoutine;
@@ -49,7 +49,6 @@ namespace FPS
         private void OnEnable()
         {
             _playerMovement.OnJumped += StopShooting;
-            _playerMovement.OnSprintingToggled += PlayerSprinting;
 
             if (_autoGun)
                 _weaponInput.Weapon.FireReleased.performed += e => StopShooting();
@@ -58,9 +57,7 @@ namespace FPS
         }
         private void OnDisable()
         {
-            _playerMovement.OnJumped -= StopShooting;
-            _playerMovement.OnSprintingToggled -= PlayerSprinting;
-           
+            _playerMovement.OnJumped -= StopShooting;         
 
             if (_autoGun)
                 _weaponInput.Weapon.FireReleased.performed -= e => StopShooting();
@@ -75,7 +72,6 @@ namespace FPS
             _gravity = GetComponentInParent<Gravity>();
             _weaponAnimator = GetComponentInChildren<ShootableWeaponAnimator>();
             GameStateController.OnGameStateChanged += OnGameStateChanged;
-            _hitMarkPool.Initialize(_hitMarkPrefab, _maxAmmoCount, false);
             _shootEffect.Stop();
             _shootEffect.gameObject.SetActive(false);
             _weaponInput.Enable();

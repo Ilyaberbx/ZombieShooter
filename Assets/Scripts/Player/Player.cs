@@ -5,31 +5,39 @@ using Zenject;
 namespace FPS
 
 {
-    public class Player : GamePlayBehaviour, IPlayer
+    public class Player : InGameBehaviour, IPlayer
     {
-
         [Inject] protected WeaponInput _weaponInput;
-        public UnitDamageHandler UnitDamageHandler => GetComponent<UnitDamageHandler>();
-        public UnitHealth UnitHealth => GetComponent<UnitHealth>();
-        public WeaponLauncher WeaponLauncher { get; private set; }
 
         public event Action OnDied;
+        public UnitDamageHandler UnitDamageHandler { get; private set; }
+        public UnitHealthHandler UnitHealthHandler { get; private set; }
+        public PlayerWeaponLauncher WeaponLauncher { get; private set; }
+        public int Health => _health;
+
+        [SerializeField] private int _health;
 
         private void Awake()
         {
-            WeaponLauncher = GetComponentInChildren<WeaponLauncher>();
+            GameStateController.OnGameStateChanged += OnGameStateChanged;
+            UnitHealthHandler = new UnitHealthHandler();
+            UnitDamageHandler = new UnitDamageHandler();
+            WeaponLauncher = GetComponentInChildren<PlayerWeaponLauncher>();
             WeaponLauncher.Initialize(this);
-            UnitHealth.Inititalize(this);
+            UnitHealthHandler.Inititalize(this);
             UnitDamageHandler.Initialize(this);
         }
         private void OnEnable()
         {
-            _weaponInput.Weapon.FirePressed.performed += e => Attack();
-            GameStateController.OnGameStateChanged += OnGameStateChanged;
+            _weaponInput.Weapon.FirePressed.performed += e => Attack();           
         }
         private void OnDisable()
         {
-            _weaponInput.Weapon.FirePressed.performed -= e => Attack();
+            _weaponInput.Weapon.FirePressed.performed -= e => Attack();           
+        }
+
+        private void OnDestroy()
+        {
             GameStateController.OnGameStateChanged -= OnGameStateChanged;
         }
         public void Attack() => WeaponLauncher.PerformAttack();
@@ -37,7 +45,7 @@ namespace FPS
         public void Die()
         {
             OnDied?.Invoke();
-            Destroy(gameObject);
+            GameStateController.SetState(GameState.GameOver);
         }
     }
 }

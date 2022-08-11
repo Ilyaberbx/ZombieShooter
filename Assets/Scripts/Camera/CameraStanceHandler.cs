@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FPS
 {
-    public class CameraStanceHandler : GamePlayBehaviour
+    public class CameraStanceHandler : InGameBehaviour
     {
         [Header("Stance Camera Settings")]
         [SerializeField] private float _stanceSmoothing;

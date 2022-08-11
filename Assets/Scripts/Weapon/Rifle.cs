@@ -54,11 +54,14 @@ namespace FPS
         }
         private void HandleHit(RaycastHit hit)
         {
-            var hitMark = _hitMarkPool.Pool.GetFreeElement();
+            BulletDecal hitMark = _decalsPreset.BulletDecal;
             hitMark.transform.position = hit.point;
 
             if (hit.transform.TryGetComponent(out IWeaponVisitor visitor))
-                visitor.Visit(this);
+                visitor.Visit(this,hit);
+
+            if (hit.rigidbody != null)
+                hit.rigidbody.AddForce(-hit.normal * _reboundForce);
         }
 
     }

@@ -3,7 +3,7 @@ using Zenject;
 
 namespace FPS
 {
-    public class WeaponSwitcher : GamePlayBehaviour
+    public class WeaponSwitcher : InGameBehaviour
     {
         [Inject] private WeaponInput _weaponInput;
 
@@ -12,7 +12,6 @@ namespace FPS
             get { return _inputSelection; }
             set
             {
-                if (_playerMovement.IsSprinting) return;
                 _inputSelection = value;
                 DefaultSelectionLogic();
             }
@@ -22,7 +21,7 @@ namespace FPS
         private int _previousWeapon;
         private float _inputSelection;
         private PlayerMovement _playerMovement;
-        private WeaponLauncher _weaponLauncher;
+        private PlayerWeaponLauncher _weaponLauncher;
 
         private void Awake() => Inititalize();
         private void OnEnable() => _weaponInput.Weapon.MouseScroll.performed += e => InputSelection = e.ReadValue<float>();
@@ -31,7 +30,7 @@ namespace FPS
         private void Inititalize()
         {
             _playerMovement = GetComponentInParent<PlayerMovement>();
-            _weaponLauncher = GetComponent<WeaponLauncher>();
+            _weaponLauncher = GetComponent<PlayerWeaponLauncher>();
             GameStateController.OnGameStateChanged += OnGameStateChanged;
             SelectWeapon();
         }

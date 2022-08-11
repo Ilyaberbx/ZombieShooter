@@ -4,15 +4,12 @@ using Zenject;
 
 namespace FPS
 {
-    public class PlayerMovement : GamePlayBehaviour
+    public class PlayerMovement : InGameBehaviour
     {
         [Inject] private DefaultMovementInput _movementInput;
 
-        public event Action<bool> OnSprintingToggled;
         public event Action OnJumped;
         public Vector3 Movement { get; private set; }
-        public bool IsSprinting => _isSprinting;
-
         public float SpeedCoefficient
         {
             get => _speedCoefficient;
@@ -30,7 +27,6 @@ namespace FPS
         private Gravity _gravity;
         private MovementSettings _movementSettings;
         private Vector2 _inputAxes;
-        private bool _isSprinting;
         private float _speedCoefficient;
 
         private void Awake() => Initialize();
@@ -39,14 +35,11 @@ namespace FPS
         {
             _movementInput.Player.Movement.performed += e => _inputAxes = e.ReadValue<Vector2>();
             _movementInput.Player.Jump.performed += e => Jump();
-            _movementInput.Player.Sprint.performed += e => ToggleSprinting();
-            _movementInput.Enable();
         }
         private void OnDisable()
         {
             _movementInput.Player.Movement.performed -= e => _inputAxes = e.ReadValue<Vector2>();
             _movementInput.Player.Jump.performed -= e => Jump();
-            _movementInput.Player.Sprint.performed -= e => ToggleSprinting();
         }
         private void Update() => CalculateMovement();
         private void Initialize()
@@ -56,6 +49,7 @@ namespace FPS
             _movementSettings = GetComponent<MovementSettings>();
             _gravity = GetComponent<Gravity>();
             GameStateController.OnGameStateChanged += OnGameStateChanged;
+            _movementInput.Enable();
         }
         private void CalculateMovement()
         {
@@ -64,21 +58,11 @@ namespace FPS
 
             Movement = transform.right * horizontalSpeed + transform.forward * verticalSpeed;
 
-            CalculateSprintingStop();
-
             if (Movement.magnitude <= 0f) return;
 
             _characterController.Move(Movement);
         }
-        private void CalculateSprintingStop()
-        {
-            if (_isSprinting)
-                if (_inputAxes.y <= _movementSettings.MinVelocityToSprint || !_gravity.TryCatchGround())
-                {
-                    StopSprinting();
-                    SpeedCoefficient = 1f;
-                }
-        }
+    
         private void Jump()
         {
             if (!_gravity.IsGrounded) return;
@@ -99,27 +83,6 @@ namespace FPS
             OnJumped?.Invoke();
 
             _gravity.Velocity = new Vector3(0, Mathf.Sqrt(_movementSettings.JumpingForce * _gravity.GeneralGravity * _gravity.GroundedGravity), 0);
-        }
-        private void ToggleSprinting()
-        {
-            if (_playerStanceSystem.CurrentStance != PlayerStance.Standing)
-            {
-                StopSprinting();
-                return;
-            }
-            _isSprinting = !_isSprinting;
-
-            OnSprintingToggled?.Invoke(_isSprinting);
-
-            SpeedCoefficient = _isSprinting ? _movementSettings.SprintingSpeedCoefficient : 1f;
-            return;
-
-        }
-
-        public void StopSprinting()
-        {
-            _isSprinting = false;
-            OnSprintingToggled?.Invoke(_isSprinting);
         }
 
     }

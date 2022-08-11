@@ -4638,7 +4638,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f63c576739a709747a1a571260d4fabd, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9467,7 +9466,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c50d77affeb31e14c9c062c282f13fc8, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9522,7 +9520,7 @@ GameObject:
   - component: {fileID: 400006}
   - component: {fileID: 19800004}
   - component: {fileID: 19900004}
-  - component: {fileID: 2281933950034995890}
+  - component: {fileID: 1775039018126449711}
   m_Layer: 0
   m_Name: Flare
   m_TagString: Untagged
@@ -14152,7 +14150,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 9f3080141f1f64197825663e067f94f8, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14196,7 +14193,7 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &2281933950034995890
+--- !u!114 &1775039018126449711
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14205,7 +14202,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56ddf77e39721c0428e1fb19ac99aa7a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cf9b2e5356f3a14f8a96e14c7565fd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _timeToDisactivate: 3

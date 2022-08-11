@@ -25,7 +25,7 @@ namespace FPS
             foreach (var check in hits)
             {
                 if (check.TryGetComponent(out IPlayer player))
-                    player.UnitDamageHandler.Visit(this);
+                    player.UnitDamageHandler.ApplyDamage(Damage);
             }
         }
         private void OnDrawGizmos()

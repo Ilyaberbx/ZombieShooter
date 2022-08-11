@@ -2,7 +2,7 @@
 
 namespace FPS
 {
-    public class ShootableWeaponAnimator : GamePlayBehaviour
+    public class ShootableWeaponAnimator : InGameBehaviour
     {
         private const string IS_SPRINTING = "IsSprinting";
         private const string IS_GROUNDED = "IsGrounded";
@@ -19,14 +19,11 @@ namespace FPS
 
         private void OnEnable()
         {
-            _playerMovement.OnSprintingToggled += ToggleSprinting;
             _weapon.OnAttacking += CalculateAttackment;
-             ToggleSprinting(_playerMovement.IsSprinting);
         }
 
         private void OnDisable()
         {
-            _playerMovement.OnSprintingToggled -= ToggleSprinting;
             _weapon.OnAttacking -= CalculateAttackment;
         }
 
@@ -61,7 +58,6 @@ namespace FPS
             _animator.SetBool(IS_MOVING, true);
         }
         private void CalculateAnimatorFalling() => _animator.SetBool(IS_GROUNDED, _gravity.IsGrounded);
-        private void ToggleSprinting(bool isSprinting) => _animator.SetBool(IS_SPRINTING, isSprinting);
         private void CalculateAttackment(bool isAttacking) => _animator.SetBool(IS_ATTACKING, isAttacking);
         public void CalculateReloading(bool isReloading) => _animator.SetBool(IS_RELOADING, isReloading);
 

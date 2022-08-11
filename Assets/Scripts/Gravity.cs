@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FPS
 {
-    public class Gravity : GamePlayBehaviour
+    public class Gravity : InGameBehaviour
     {
         public bool IsGrounded => TryCatchGround();
 

@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 namespace FPS
 {
-    public class NavMeshEnemyChaser : GamePlayBehaviour
+    public class NavMeshEnemyChaser : InGameBehaviour
     {
         [Header("Settings")]
         [SerializeField] private float _chasingSpeed;
@@ -11,8 +11,8 @@ namespace FPS
         private Player _player;      
         private NavMeshAgent _navMeshAgent;
 
-        private void OnEnable() => GameStateController.OnGameStateChanged += OnGameStateChanged;
-        private void OnDisable() => GameStateController.OnGameStateChanged -= OnGameStateChanged;
+        private void Awake() => GameStateController.OnGameStateChanged += OnGameStateChanged;
+        private void OnDestroy() => GameStateController.OnGameStateChanged -= OnGameStateChanged;
         public void Initialize(Player player)
         {
             this._player = player;

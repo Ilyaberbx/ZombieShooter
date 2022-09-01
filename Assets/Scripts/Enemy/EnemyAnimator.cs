@@ -11,6 +11,8 @@ namespace FPS
 
         private void Awake() => _animator = GetComponent<Animator>();
 
+        private void OnEnable() => _animator.enabled = true;
+        private void OnDisable() => _animator.enabled = false;
         public void AnimateChasing(bool isChasing) => _animator.SetBool(IS_CHASING, isChasing);
 
         public void AnimateAttacking() => _animator.SetTrigger(ATTACK);

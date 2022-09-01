@@ -52,7 +52,7 @@ MonoBehaviour:
   _reloadTime: 2
   _autoGun: 0
   _damage: 1
-  _reboundForce: 0
+  _reboundForce: 10
   _camera: {fileID: 5871161514491101269}
   _shootEffect: {fileID: 8541252341437856760}
 --- !u!1 &571709577
@@ -177,6 +177,7 @@ GameObject:
   m_Component:
   - component: {fileID: 575887959}
   - component: {fileID: 575887961}
+  - component: {fileID: 544832139}
   m_Layer: 0
   m_Name: WeaponAnimator
   m_TagString: Untagged
@@ -218,6 +219,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &544832139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575887958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5411c0c5003b40f4c88c1b08f670b2a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1133304300
 GameObject:
   m_ObjectHideFlags: 0
@@ -678,11 +691,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shotsInTime: 0.1
   _shootingRange: 100
-  _maxAmmoCount: 30
+  _maxAmmoCount: 80
   _reloadTime: 2
   _autoGun: 1
   _damage: 1
-  _reboundForce: 0
+  _reboundForce: 10
   _camera: {fileID: 5871161514491101269}
   _shootEffect: {fileID: 8541252341391409531}
 --- !u!1 &2595545043047940171
@@ -1180,7 +1193,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5871161512793151134}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.976, z: 0}
+  m_LocalPosition: {x: 0, y: -0.985, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5871161513756575274}
@@ -1409,7 +1422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _walkingForwardSpeed: 7
   _walkingStrafeSpeed: 5
-  _jumpingForce: 1
+  _jumpingForce: 4
   _sprintingSpeedCoefficient: 1.5
   _crouchingSpeedCoefficient: 0.6
   _proneSpeedUpCoefficient: 0.25
@@ -1428,7 +1441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gravity: -9.81
   _targetCheckGroundPosition: {fileID: 5871161512793151135}
-  _checkingGroundfRadius: 0.45
+  _checkingGroundfRadius: 0.5
   _settings: {fileID: 11400000, guid: 1dd1832c52a9ef24aae8f575449543c3, type: 2}
 --- !u!114 &5871161513756575255
 MonoBehaviour:
@@ -1468,7 +1481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d439c5d76407a6b479e81f5d18c1c6b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 10
+  _health: 2
 --- !u!1 &5871161514174598485
 GameObject:
   m_ObjectHideFlags: 0
@@ -2393,6 +2406,7 @@ GameObject:
   - component: {fileID: 8902277035421097644}
   - component: {fileID: 69879383}
   - component: {fileID: 69879384}
+  - component: {fileID: 1564752492}
   m_Layer: 0
   m_Name: WeaponsHolder
   m_TagString: Untagged
@@ -2446,6 +2460,18 @@ MonoBehaviour:
   _swayResetSmoothing: 0.1
   _swayClampX: 8
   _swayClampY: 8
+--- !u!114 &1564752492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8902277035421097643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff8e762e6fb84f840865da2f29ca0c95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8902277035528730175
 GameObject:
   m_ObjectHideFlags: 0

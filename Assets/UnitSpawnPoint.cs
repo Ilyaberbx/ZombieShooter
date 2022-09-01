@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemySpawnPosition : MonoBehaviour
+public class UnitSpawnPoint : MonoBehaviour
 {
     [SerializeField] private float _radiusOfDisplay;
 

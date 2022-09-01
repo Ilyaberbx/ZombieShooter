@@ -8,7 +8,7 @@ namespace FPS
     public class PlayerInstaller : MonoInstaller
     {
         [SerializeField] private Player _player;
-
+        [SerializeField] private UnitSpawnPoint _at;
         public override void InstallBindings()
         {
             BindPlayer();
@@ -16,9 +16,12 @@ namespace FPS
 
         private void BindPlayer()
         {
+            Player player = Container.InstantiatePrefabForComponent<Player>(_player, _at.transform.position,Quaternion.identity,null);
+
             Container.Bind<Player>().
-                FromInstance(_player).
-                AsSingle();
+                FromInstance(player)
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

@@ -54,6 +54,8 @@ namespace FPS
         }
         private void HandleHit(RaycastHit hit)
         {
+            if (GameStateController.CurrentState == GameState.Pause) return;
+
             BulletDecal hitMark = _decalsPreset.BulletDecal;
             hitMark.transform.position = hit.point;
 

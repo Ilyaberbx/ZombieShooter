@@ -4,7 +4,7 @@ namespace FPS
 {
     public class FactoriesInstaller : MonoInstaller, IInitializable
     {      
-        public void Initialize() => Container.Resolve<DefaulZombieFactory>();
+        public void Initialize() => Container.Resolve<DefaultZombieFactory>();
 
         public override void InstallBindings()
         {
@@ -20,7 +20,7 @@ namespace FPS
         }
         private void BindEnemyFactory()
         {
-            Container.Bind<DefaulZombieFactory>().
+            Container.Bind<DefaultZombieFactory>().
                 FromNew().AsSingle();
         }
     }

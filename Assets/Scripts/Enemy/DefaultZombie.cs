@@ -15,7 +15,10 @@ namespace FPS
             Weapon.Attack();
 
             await Task.Delay(TimeBeforeChase);
+
             SetChasing(true);
+
+            OnGameStateChanged(GameStateController.CurrentState);
         }
     }
 }

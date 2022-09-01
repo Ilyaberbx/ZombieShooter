@@ -27,25 +27,15 @@ namespace FPS
             UnitHealthHandler.Inititalize(this);
             UnitDamageHandler.Initialize(this);
         }
-        private void OnEnable()
-        {
-            _weaponInput.Weapon.FirePressed.performed += e => Attack();           
-        }
-        private void OnDisable()
-        {
-            _weaponInput.Weapon.FirePressed.performed -= e => Attack();           
-        }
+        private void OnEnable() => _weaponInput.Weapon.FirePressed.performed += e => Attack();
+        private void OnDisable() => _weaponInput.Weapon.FirePressed.performed -= e => Attack();
 
-        private void OnDestroy()
-        {
-            GameStateController.OnGameStateChanged -= OnGameStateChanged;
-        }
+        private void OnDestroy() => GameStateController.OnGameStateChanged -= OnGameStateChanged;
         public void Attack() => WeaponLauncher.PerformAttack();
 
         public void Die()
         {
             OnDied?.Invoke();
-            GameStateController.SetState(GameState.GameOver);
         }
     }
 }

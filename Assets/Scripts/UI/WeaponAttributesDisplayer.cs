@@ -1,11 +1,12 @@
 ﻿using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace FPS
 {
     public class WeaponAttributesDisplayer : MonoBehaviour
     {
-        [SerializeField] private GamePlayCanvas _gamePlayCanvas;
+        [Inject] private GamePlayCanvas _gamePlayCanvas;
 
         private BaseShootableWeapon _weapon;
 

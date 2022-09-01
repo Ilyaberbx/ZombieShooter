@@ -10,7 +10,5 @@ namespace FPS
 
         int Health { get; }
         void Die();
-
-        event Action OnDied;
     }
 }

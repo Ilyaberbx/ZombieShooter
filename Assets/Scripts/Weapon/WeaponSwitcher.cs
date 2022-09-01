@@ -7,16 +7,6 @@ namespace FPS
     {
         [Inject] private WeaponInput _weaponInput;
 
-        public float InputSelection
-        {
-            get { return _inputSelection; }
-            set
-            {
-                _inputSelection = value;
-                DefaultSelectionLogic();
-            }
-        }
-
         private int _selectedWeapon = 0;
         private int _previousWeapon;
         private float _inputSelection;
@@ -24,8 +14,8 @@ namespace FPS
         private PlayerWeaponLauncher _weaponLauncher;
 
         private void Awake() => Inititalize();
-        private void OnEnable() => _weaponInput.Weapon.MouseScroll.performed += e => InputSelection = e.ReadValue<float>();
-        private void OnDisable() => _weaponInput.Weapon.MouseScroll.performed -= e => InputSelection = e.ReadValue<float>();
+        private void OnEnable() => _weaponInput.Weapon.MouseScroll.performed += e => _inputSelection = e.ReadValue<float>();
+        private void OnDisable() => _weaponInput.Weapon.MouseScroll.performed -= e => _inputSelection = e.ReadValue<float>();
         private void OnDestroy() => GameStateController.OnGameStateChanged -= OnGameStateChanged;
         private void Inititalize()
         {
@@ -34,6 +24,7 @@ namespace FPS
             GameStateController.OnGameStateChanged += OnGameStateChanged;
             SelectWeapon();
         }
+        private void Update() => DefaultSelectionLogic();
         private void DefaultSelectionLogic()
         {
             _previousWeapon = _selectedWeapon;

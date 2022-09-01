@@ -123,5 +123,10 @@ namespace FPS
             _inCoolDown = false;
         }
 
+        protected override void OnGameStateChanged(GameState newState)
+        {
+            if(newState == GameState.Pause)
+            StopShooting();
+        }
     }
 }

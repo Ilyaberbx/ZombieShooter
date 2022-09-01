@@ -11,8 +11,6 @@ namespace FPS
         private Player _player;      
         private NavMeshAgent _navMeshAgent;
 
-        private void Awake() => GameStateController.OnGameStateChanged += OnGameStateChanged;
-        private void OnDestroy() => GameStateController.OnGameStateChanged -= OnGameStateChanged;
         public void Initialize(Player player)
         {
             this._player = player;
@@ -21,9 +19,8 @@ namespace FPS
         }
         public void SetMoveable(bool isMoveable) => _navMeshAgent.speed = isMoveable ? _chasingSpeed : 0;
         private void Update() => Chase();
-        private void Chase()
-        {
-            _navMeshAgent.SetDestination(_player.transform.position);
-        }
+        private void Chase() => _navMeshAgent.SetDestination(_player.transform.position);
+
     }
+
 }

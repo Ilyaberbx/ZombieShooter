@@ -6,37 +6,26 @@ namespace FPS
     public class PauseController : InGameBehaviour
     {
         [Inject] private DefaultMovementInput _input;
-
+        [Inject] private WeaponInput _weaponInput;
+        [Inject] private MenuProvider _menuProvider;
         private PauseLogic _pauseLogic;
         private void Awake()
         {
             Initialize();
-
-            if (_pauseLogic != null)
-            _input.Player.Pause.performed += e => _pauseLogic.PauseToogle();
-
             GameStateController.OnGameStateChanged += OnGameStateChanged;
+            _input.Player.Pause.performed += e => _pauseLogic.PauseToogle();
         }
         private void OnDestroy()
         {
-            _input.Player.Pause.performed -= e => _pauseLogic.PauseToogle();
             GameStateController.OnGameStateChanged -= OnGameStateChanged;
+            _input.Player.Pause.performed -= e => _pauseLogic.PauseToogle();
+            _input.Disable();
         }
-
-        private void Initialize() => _pauseLogic = new PauseLogic(GameStateController);
+        private void Initialize() => _pauseLogic = new PauseLogic(GameStateController, _menuProvider, _weaponInput, _input);
         public void Resume()
         {
             if (_pauseLogic != null)
                 _pauseLogic.Resume();
-        }
-        protected override void OnGameStateChanged(GameState newState)
-        {
-            if (GameStateController.CurrentState == GameState.GameOver)
-            {
-                _input.Player.Pause.performed -= e => _pauseLogic.PauseToogle();
-                _pauseLogic = null;
-            }
-
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace FPS
 {
     [RequireComponent(typeof(DefaultZombie))]
-    public class DefaultZombieMeleeAttackment : MonoBehaviour, IWeapon
+    public class DefaultZombieMeleeAttackment : InGameBehaviour, IWeapon
     {
 
         [SerializeField] private int _damage;
@@ -19,6 +19,8 @@ namespace FPS
         private IEnumerator AttackingRoutine()
         {
             yield return new WaitForSeconds(_delayBeforePerformAttack);
+
+            if (GameStateController.CurrentState == GameState.Pause) StopAllCoroutines();
 
             Collider[] hits = Physics.OverlapSphere(_attackPoint.position, _attackRadius);
 

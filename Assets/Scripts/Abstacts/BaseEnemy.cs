@@ -9,7 +9,7 @@ namespace FPS
 {
     public abstract class BaseEnemy : InGameBehaviour,IUnit
     {
-        [Inject] private Player _player;
+        [Inject] private Player _player;// чуть чуть топорного кода) 
         public NavMeshEnemyChaser TargetChaser { get; private set; }
         public EnemyAnimator Animator { get; private set; }
         public IWeapon Weapon { get; private set; }
@@ -18,7 +18,7 @@ namespace FPS
         public UnitDamageHandler UnitDamageHandler { get; private set; }
         public UnitHealthHandler UnitHealthHandler { get; private set; }
 
-        public event Action OnDied;
+        public static event Action OnDied;
 
         [Header("EnemySettings")]
         [SerializeField] private int _timeBeforeChase;
@@ -56,6 +56,7 @@ namespace FPS
             TargetChaser.enabled = false;
             await Task.Delay(TimeBeforeChase);
             SetChasing(true);
+            OnGameStateChanged(GameStateController.CurrentState);
         }
 
         private void Update()
@@ -90,6 +91,11 @@ namespace FPS
             yield return new WaitForSeconds(_timeBeforeDisappear);
             Destroy(gameObject);
         }
-
+        protected override void OnGameStateChanged(GameState newState)
+        {
+            SetChasing(newState == GameState.GamePlay);
+            Animator.enabled = newState == GameState.GamePlay;
+            enabled = newState == GameState.GamePlay;
+        }
     }
 }

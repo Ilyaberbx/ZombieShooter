@@ -17,15 +17,9 @@ namespace FPS
 
         private void Awake() => Initialize();
 
-        private void OnEnable()
-        {
-            _weapon.OnAttacking += CalculateAttackment;
-        }
+        private void OnEnable() => _weapon.OnAttacking += CalculateAttackment;
 
-        private void OnDisable()
-        {
-            _weapon.OnAttacking -= CalculateAttackment;
-        }
+        private void OnDisable() => _weapon.OnAttacking -= CalculateAttackment;
 
         private void Update()
         {
@@ -61,6 +55,7 @@ namespace FPS
         private void CalculateAttackment(bool isAttacking) => _animator.SetBool(IS_ATTACKING, isAttacking);
         public void CalculateReloading(bool isReloading) => _animator.SetBool(IS_RELOADING, isReloading);
 
+        protected override void OnGameStateChanged(GameState newState) => _animator.speed = newState == GameState.Pause ? 0 : 1;
 
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace FPS
 {
-    public interface IShop<T>
+    public interface IShop
     {
         Wallet PlayerWallet { get; }
-        void Buy(T type, int cost);
+        void Buy();
     }
 }

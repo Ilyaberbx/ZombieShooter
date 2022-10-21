@@ -7,7 +7,6 @@ namespace FPS
     [RequireComponent(typeof(DefaultZombie))]
     public class DefaultZombieMeleeAttackment : InGameBehaviour, IWeapon
     {
-
         [SerializeField] private int _damage;
         [SerializeField] private Transform _attackPoint;
         [SerializeField] private float _attackRadius;
@@ -36,5 +35,6 @@ namespace FPS
             Gizmos.DrawSphere(_attackPoint.transform.position, _attackRadius);
             Gizmos.color = Color.white;
         }
+        public WeaponType GetWeaponType() => WeaponType.ZombieMelee;
     }
 }

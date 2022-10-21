@@ -17,6 +17,9 @@ namespace FPS
 
         public abstract IEnumerator ShootingRoutine();
 
+        public abstract WeaponType GetWeaponType();
+ 
+
         public event Action<bool> OnAttacking;
         public event Action<int> OnAmmoCountChanged;
         public int CurrentAmmo { get; protected set; }
@@ -54,6 +57,8 @@ namespace FPS
                 _weaponInput.Weapon.FireReleased.performed += e => StopShooting();
 
             _weaponInput.Weapon.Reload.performed += e => Reload();
+
+            ChangeAmmoCount(CurrentAmmo);
         }
         private void OnDisable()
         {
@@ -91,8 +96,6 @@ namespace FPS
 
             return true;
         }    
-        private void PlayerSprinting(bool isSprinting) { if (isSprinting) StopShooting(); }
-
         private void Reload()
         {
             if (_inCoolDown) return;
@@ -128,5 +131,6 @@ namespace FPS
             if(newState == GameState.Pause)
             StopShooting();
         }
+
     }
 }

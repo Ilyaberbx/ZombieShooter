@@ -3,6 +3,6 @@
     public interface IPlayer : IUnit
     {
         void Attack();
-        PlayerWeaponLauncher WeaponLauncher { get; }
+        WeaponLauncher WeaponLauncher { get; }
     }
 }

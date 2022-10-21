@@ -6,7 +6,6 @@ namespace FPS
         MainMenu,
         LevelSelection,
         Pause,
-        Shop,
         GamePlay,
         GameOver,
         GameWin,

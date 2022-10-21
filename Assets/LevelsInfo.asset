@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _allLevels:
   - _id: 1
+    _levelReward: 10

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 namespace FPS
@@ -7,11 +8,12 @@ namespace FPS
     {
         [Inject] private WeaponInput _weaponInput;
 
-        private int _selectedWeapon = 0;
+        private int _selectedWeapon;
         private int _previousWeapon;
+        private int _selectionMax;
         private float _inputSelection;
-        private PlayerMovement _playerMovement;
-        private PlayerWeaponLauncher _weaponLauncher;
+        private WeaponLauncher _weaponLauncher;
+        private WeaponVault _weaponVault;
 
         private void Awake() => Inititalize();
         private void OnEnable() => _weaponInput.Weapon.MouseScroll.performed += e => _inputSelection = e.ReadValue<float>();
@@ -19,10 +21,11 @@ namespace FPS
         private void OnDestroy() => GameStateController.OnGameStateChanged -= OnGameStateChanged;
         private void Inititalize()
         {
-            _playerMovement = GetComponentInParent<PlayerMovement>();
-            _weaponLauncher = GetComponent<PlayerWeaponLauncher>();
+            _weaponLauncher = GetComponent<WeaponLauncher>();
+            _weaponVault = new WeaponVault();
             GameStateController.OnGameStateChanged += OnGameStateChanged;
             SelectWeapon();
+            CalculateSelectionRange();
         }
         private void Update() => DefaultSelectionLogic();
         private void DefaultSelectionLogic()
@@ -40,16 +43,24 @@ namespace FPS
             foreach (Transform weapon in transform)
             {
                 weapon.gameObject.SetActive(i == _selectedWeapon);
+
                 i++;
+
                 if (weapon.gameObject.activeInHierarchy)
                     SetSelectedWeapon(weapon.GetComponent<IWeapon>());
             }
 
         }
-        private void SetSelectedWeapon(IWeapon weapon)
+        private void CalculateSelectionRange()
         {
-            _weaponLauncher.SetWeapon(weapon);
+            _selectionMax = 0;
+            foreach (Transform weapon in transform)
+            {
+                if (_weaponVault.IsAvaliable(weapon.GetComponent<IWeapon>().GetWeaponType()))
+                    _selectionMax++;
+            }
         }
+        private void SetSelectedWeapon(IWeapon weapon) => _weaponLauncher.SetWeapon(weapon);
 
         private void CalculateInputSelection()
         {
@@ -57,6 +68,8 @@ namespace FPS
                 _selectedWeapon = _selectedWeapon >= transform.childCount - 1 ? 0 : _selectedWeapon + 1;
             if (_inputSelection < 0f)
                 _selectedWeapon = _selectedWeapon <= transform.childCount - 1 ? 0 : _selectedWeapon - 1;
+
+            _selectedWeapon = Mathf.Clamp(_selectedWeapon, 0, _selectionMax - 1);
         }
     }
 }

@@ -13,7 +13,6 @@ namespace FPS
         }
         public void LevelSeletion() => SetMenuState(MenuState.LevelSelection);
         public void MainMenu() => SetMenuState(MenuState.MainMenu);
-        public void Shop() => SetMenuState(MenuState.Shop);
         public void PauseSettings() => SetMenuState(MenuState.Pause);
         public void GameOver() => SetMenuState(MenuState.GameOver);
         public void GamePlay() => SetMenuState(MenuState.GamePlay);

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace FPS
 {
     public class Pistol : BaseShootableWeapon
-    {
+    {    
         public override void Attack()
         {
             if (!CanShoot()) return;
@@ -57,6 +57,6 @@ namespace FPS
             if (hit.rigidbody != null)
                 hit.rigidbody.AddForce(-hit.normal * _reboundForce);
         }
-
+        public override WeaponType GetWeaponType() => WeaponType.Pistol;
     }
 }

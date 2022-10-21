@@ -4,7 +4,6 @@ namespace FPS
 {
     public class ShootableWeaponAnimator : InGameBehaviour
     {
-        private const string IS_SPRINTING = "IsSprinting";
         private const string IS_GROUNDED = "IsGrounded";
         private const string IS_MOVING = "IsMoving";
         private const string IS_ATTACKING = "IsAttacking";

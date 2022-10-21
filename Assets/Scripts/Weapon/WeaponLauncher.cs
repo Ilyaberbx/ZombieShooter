@@ -1,14 +1,14 @@
-﻿namespace FPS
+﻿using UnityEngine;
+
+namespace FPS
 {
-    public class PlayerWeaponLauncher : InGameBehaviour
+    public class WeaponLauncher : MonoBehaviour 
     {
         private IWeapon _weapon;
-        private PlayerMovement _playerMovement;
         private Gravity _gravity;
 
         public void Initialize(Player player)
         {
-            _playerMovement = player.GetComponent<PlayerMovement>();
             _gravity = player.GetComponent<Gravity>();
         }
 

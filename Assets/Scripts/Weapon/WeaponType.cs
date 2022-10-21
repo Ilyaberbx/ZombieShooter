@@ -3,6 +3,7 @@
     public enum WeaponType
     {
         Pistol,
-        Rifle
+        Rifle,
+        ZombieMelee
     }
 }

@@ -12,6 +12,6 @@ namespace FPS
 
         private void Awake() => _weapon = GetComponentInParent<BaseShootableWeapon>();
         private void OnEnable() => _weapon.OnAmmoCountChanged += _gamePlayCanvas.DisplayAmmoCount;
-        private void OnDisable() => _weapon.OnAmmoCountChanged -= _gamePlayCanvas.DisplayAmmoCount;
+        private void OnDestroy() => _weapon.OnAmmoCountChanged -= _gamePlayCanvas.DisplayAmmoCount;
     }
 }

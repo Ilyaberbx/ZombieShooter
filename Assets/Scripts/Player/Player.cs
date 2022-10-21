@@ -12,7 +12,7 @@ namespace FPS
         public event Action OnDied;
         public UnitDamageHandler UnitDamageHandler { get; private set; }
         public UnitHealthHandler UnitHealthHandler { get; private set; }
-        public PlayerWeaponLauncher WeaponLauncher { get; private set; }
+        public WeaponLauncher WeaponLauncher { get; private set; }
         public int Health => _health;
 
         [SerializeField] private int _health;
@@ -22,7 +22,7 @@ namespace FPS
             GameStateController.OnGameStateChanged += OnGameStateChanged;
             UnitHealthHandler = new UnitHealthHandler();
             UnitDamageHandler = new UnitDamageHandler();
-            WeaponLauncher = GetComponentInChildren<PlayerWeaponLauncher>();
+            WeaponLauncher = GetComponentInChildren<WeaponLauncher>();
             WeaponLauncher.Initialize(this);
             UnitHealthHandler.Inititalize(this);
             UnitDamageHandler.Initialize(this);

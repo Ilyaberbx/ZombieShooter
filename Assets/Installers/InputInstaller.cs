@@ -1,4 +1,5 @@
 ﻿using Zenject;
+using UnityEngine;
 
 namespace FPS
 {
@@ -7,14 +8,12 @@ namespace FPS
         public override void InstallBindings() => BindInputs();
         private void BindInputs()
         {
-            DefaultMovementInput _movementInput = new DefaultMovementInput();
             Container.Bind<DefaultMovementInput>().
-                FromInstance(_movementInput).
+                FromNew().
                 AsSingle().
                 NonLazy();
-            WeaponInput _weaponInput = new WeaponInput();
             Container.Bind<WeaponInput>().
-                FromInstance(_weaponInput).
+                FromNew().
                 AsSingle().
                 NonLazy();
         }

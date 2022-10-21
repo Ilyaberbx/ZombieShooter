@@ -66,5 +66,6 @@ namespace FPS
                 hit.rigidbody.AddForce(-hit.normal * _reboundForce);
         }
 
+        public override WeaponType GetWeaponType() => WeaponType.Rifle;
     }
 }
